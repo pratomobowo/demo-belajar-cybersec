@@ -411,7 +411,7 @@
               <div class="hint-actions">
                 <button class="hint-btn" id="idorHintBtn" type="button">Minta hint 1</button>
                 <div class="hint-list" id="idorHints" aria-live="polite">
-                  <p class="hint-step" hidden><strong>Hint 1</strong>Perhatikan URL saat halaman profil Andi terbuka.</p>
+                  <p class="hint-step" hidden><strong>Hint 1</strong>Lihat address bar browser: di ujung URL ada tulisan <code>?student_id=1001</code>. Angka itu bisa kamu ubah langsung di address bar, lalu tekan Enter.</p>
                   <p class="hint-step" hidden><strong>Hint 2</strong>ID pengguna sering berurutan. Coba ubah satu angka terakhir.</p>
                   <p class="hint-step" hidden><strong>Hint 3</strong>Coba ubah <code>student_id=1001</code> menjadi <code>student_id=1002</code>.</p>
                 </div>
@@ -462,29 +462,28 @@
         document.getElementById("profileStatus").textContent = profile.status;
       }
 
+      var STUDENTS = {
+        "1001": { initials: "AS", name: "Andi Saputra", role: "Siswa XII PPLG", number: "2026-DEMO-012", email: "andi.siswa@example.test", status: "Aktif" },
+        "1002": { initials: "RK", name: "Rina Kurnia", role: "Siswi XII PPLG", number: "2026-DEMO-027", email: "rina.siswa@example.test", status: "Aktif" }
+      };
+
       function loadProfileFromUrl() {
         var id = profileIdFromUrl() || "1001";
         document.body.classList.remove("idor-hacked");
         document.getElementById("idorFlagText").textContent = "";
-        if (!/^\d{4}$/.test(id)) {
-          showToast("Profil tidak ditemukan.");
+        var profile = /^\d{4}$/.test(id) ? STUDENTS[id] : null;
+        if (!profile) {
+          showToast("Profil dengan ID " + id + " tidak ditemukan.");
           return;
         }
-        fetch("assets/api/profile/" + id + ".json").then(function (response) {
-          if (!response.ok) throw new Error("not-found");
-          return response.json();
-        }).then(function (profile) {
-          renderProfile(profile);
-          if (id !== "1001") {
-            revealFlag("idor", "idorFlagText", function () {
-              document.body.classList.add("idor-hacked");
-              showToast("Data siswa lain terbuka. Flag ditemukan.");
-              window.setTimeout(function () { document.getElementById("idorPanel").scrollIntoView({ behavior:"smooth", block:"center" }); }, 180);
-            });
-          }
-        }).catch(function () {
-          showToast("Profil dengan ID " + id + " tidak ditemukan.");
-        });
+        renderProfile(profile);
+        if (id !== "1001") {
+          revealFlag("idor", "idorFlagText", function () {
+            document.body.classList.add("idor-hacked");
+            showToast("Data siswa lain terbuka. Flag ditemukan.");
+            window.setTimeout(function () { document.getElementById("idorPanel").scrollIntoView({ behavior:"smooth", block:"center" }); }, 180);
+          });
+        }
       }
 
       function routeForView(name) {
