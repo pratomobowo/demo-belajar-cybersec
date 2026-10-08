@@ -1,0 +1,625 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="light dark" />
+  <link rel="icon" href="data:," />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet" />
+  <title>Demo Belajar CyberSec</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #f4f6f8;
+      --surface: #ffffff;
+      --surface-2: #f8fafb;
+      --ink: #16201a;
+      --muted: #667169;
+      --line: #dde3df;
+      --brand: #136b46;
+      --brand-2: #0e5538;
+      --brand-soft: #e5f3ec;
+      --accent: #f2c94c;
+      --danger: #c13c31;
+      --danger-soft: #fff0ee;
+      --success: #117548;
+      --shadow: 0 12px 36px rgba(27, 42, 33, .09);
+      --sans: "DM Sans", system-ui, sans-serif;
+      --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Consolas, monospace;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0d1310;
+        --surface: #141d18;
+        --surface-2: #19231e;
+        --ink: #eff5f1;
+        --muted: #a9b5ad;
+        --line: #2d3932;
+        --brand: #52c58f;
+        --brand-2: #6cd7a3;
+        --brand-soft: #17352a;
+        --accent: #f0c94d;
+        --danger: #ff8378;
+        --danger-soft: #351f1d;
+        --success: #63d69b;
+        --shadow: 0 16px 44px rgba(0, 0, 0, .28);
+      }
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--sans);
+      font-size: 15px;
+      line-height: 1.5;
+    }
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+    button:focus-visible, input:focus-visible, summary:focus-visible {
+      outline: 3px solid color-mix(in srgb, var(--brand) 45%, transparent);
+      outline-offset: 2px;
+    }
+    svg { display: block; }
+
+    .app-shell { min-height: 100vh; display: grid; grid-template-columns: 232px minmax(0, 1fr); }
+    .sidebar {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      padding: 24px 16px;
+      background: #10291e;
+      color: #eaf4ee;
+      border-right: 1px solid rgba(255,255,255,.08);
+    }
+    .school-mark { display: flex; align-items: center; gap: 11px; padding: 0 8px 28px; }
+    .school-logo {
+      display: grid; place-items: center; width: 36px; height: 36px; border-radius: 10px;
+      background: var(--accent); color: #173021; font-weight: 800;
+    }
+    .school-mark strong { display: block; font-size: .92rem; letter-spacing: .02em; }
+    .school-mark span { display: block; margin-top: 1px; color: #a9c0b3; font-size: .72rem; }
+    .nav-label { margin: 0 10px 9px; color: #789384; font-size: .66rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+    .nav-list { display: grid; gap: 5px; }
+    .nav-btn {
+      display: flex; align-items: center; gap: 11px; width: 100%; min-height: 43px; padding: 0 12px;
+      border: 0; border-radius: 10px; background: transparent; color: #bcd0c4; text-align: left; font-weight: 600;
+    }
+    .nav-btn svg { width: 18px; height: 18px; }
+    .nav-btn:hover { background: rgba(255,255,255,.06); color: #fff; }
+    .nav-btn.active { background: #e7f6ed; color: #155b3d; }
+    .sidebar-bottom { position: absolute; left: 16px; right: 16px; bottom: 20px; }
+    .student-mini { display: flex; align-items: center; gap: 10px; padding: 12px; border-top: 1px solid rgba(255,255,255,.1); }
+    .mini-avatar, .avatar {
+      display: grid; place-items: center; flex: 0 0 auto; border-radius: 50%; background: #d8f17b; color: #172713; font-weight: 800;
+    }
+    .mini-avatar { width: 34px; height: 34px; font-size: .78rem; }
+    .student-mini strong { display:block; font-size: .82rem; }
+    .student-mini span { color:#8fa79a; font-size:.7rem; }
+
+    .main { min-width: 0; }
+    .topbar {
+      position: sticky; top: 0; z-index: 8; display:flex; align-items:center; justify-content:space-between; gap:16px;
+      height:72px; padding:0 34px; border-bottom:1px solid var(--line); background:color-mix(in srgb, var(--surface) 92%, transparent); backdrop-filter: blur(14px);
+    }
+    .breadcrumb { color: var(--muted); font-size:.84rem; }
+    .breadcrumb strong { color:var(--ink); font-weight:600; }
+    .top-actions { display:flex; align-items:center; gap:10px; }
+    .icon-btn {
+      position:relative; display:grid; place-items:center; width:39px; height:39px; border:1px solid var(--line); border-radius:10px; background:var(--surface); color:var(--ink);
+    }
+    .icon-btn svg { width:18px; height:18px; }
+    .notification-dot { position:absolute; top:7px; right:8px; width:7px; height:7px; border:2px solid var(--surface); border-radius:50%; background:#e45846; }
+    .mobile-menu { display:none; }
+
+    .content { width:min(1180px, 100%); margin:0 auto; padding:32px 34px 88px; }
+    .view { display:none; }
+    .view.active { display:block; }
+    .page-head { display:flex; align-items:flex-end; justify-content:space-between; gap:22px; margin-bottom:26px; }
+    .page-head h1 { margin:0; font-size:clamp(1.9rem, 3vw, 2.6rem); line-height:1.1; letter-spacing:-.035em; }
+    .page-head p { margin:8px 0 0; color:var(--muted); }
+    .date-chip { padding:9px 12px; border:1px solid var(--line); border-radius:9px; background:var(--surface); color:var(--muted); font-size:.8rem; white-space:nowrap; }
+
+    .hero-card {
+      position:relative; overflow:hidden; display:grid; grid-template-columns:minmax(0, 1.35fr) minmax(240px, .65fr); gap:24px;
+      margin-bottom:22px; padding:30px; border-radius:18px; background:#155d40; color:#fff; box-shadow:var(--shadow);
+    }
+    .hero-card::after { content:""; position:absolute; width:260px; height:260px; right:-70px; top:-105px; border:50px solid rgba(255,255,255,.06); border-radius:50%; }
+    .hero-card h2 { position:relative; z-index:1; max-width:600px; margin:0; font-size:clamp(1.55rem, 3vw, 2.35rem); line-height:1.15; letter-spacing:-.03em; }
+    .hero-card p { position:relative; z-index:1; max-width:620px; margin:12px 0 0; color:#cfe3d7; }
+    .hero-stats { position:relative; z-index:1; display:grid; grid-template-columns:1fr 1fr; gap:10px; align-content:end; }
+    .hero-stat { padding:14px; border:1px solid rgba(255,255,255,.14); border-radius:12px; background:rgba(5,35,22,.28); }
+    .hero-stat strong { display:block; font-size:1.35rem; }
+    .hero-stat span { color:#cfe3d7; font-size:.75rem; }
+
+    .dashboard-grid { display:grid; grid-template-columns:minmax(0, 1.35fr) minmax(280px, .65fr); gap:22px; }
+    .panel { min-width:0; padding:22px; border:1px solid var(--line); border-radius:16px; background:var(--surface); box-shadow:0 4px 18px rgba(27,42,33,.04); }
+    .panel-head { display:flex; align-items:center; justify-content:space-between; gap:14px; margin-bottom:18px; }
+    .panel-head h2 { margin:0; font-size:1.05rem; }
+    .text-btn { padding:0; border:0; background:transparent; color:var(--brand); font-size:.8rem; font-weight:700; }
+
+    .course-list { display:grid; gap:12px; }
+    .course-row { display:grid; grid-template-columns:46px minmax(0,1fr) auto; align-items:center; gap:13px; padding:12px; border-radius:12px; background:var(--surface-2); }
+    .course-icon { display:grid; place-items:center; width:46px; height:46px; border-radius:11px; background:var(--brand-soft); color:var(--brand); font-family:var(--mono); font-size:.72rem; font-weight:600; }
+    .course-row h3 { margin:0; font-size:.9rem; }
+    .course-row p { margin:3px 0 0; color:var(--muted); font-size:.75rem; }
+    .progress-ring { width:38px; height:38px; border-radius:50%; display:grid; place-items:center; background:conic-gradient(var(--brand) var(--p), var(--line) 0); }
+    .progress-ring::after { content:attr(data-value); display:grid; place-items:center; width:29px; height:29px; border-radius:50%; background:var(--surface); color:var(--ink); font-size:.59rem; font-weight:700; }
+
+    .agenda { display:grid; gap:14px; }
+    .agenda-item { display:grid; grid-template-columns:44px 1fr; gap:12px; }
+    .agenda-date { text-align:center; padding:6px 4px; border-radius:9px; background:var(--brand-soft); color:var(--brand); }
+    .agenda-date strong { display:block; font-size:1rem; line-height:1; }
+    .agenda-date span { font-size:.62rem; text-transform:uppercase; }
+    .agenda-item h3 { margin:1px 0 2px; font-size:.86rem; }
+    .agenda-item p { margin:0; color:var(--muted); font-size:.74rem; }
+
+    .cards-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; }
+    .item-card { padding:20px; border:1px solid var(--line); border-radius:15px; background:var(--surface); }
+    .item-card .tag, .status-pill { display:inline-block; padding:5px 8px; border-radius:7px; background:var(--brand-soft); color:var(--brand); font-size:.68rem; font-weight:700; }
+    .item-card h2 { margin:16px 0 7px; font-size:1rem; }
+    .item-card p { margin:0; color:var(--muted); font-size:.82rem; }
+    .item-meta { display:flex; justify-content:space-between; gap:12px; margin-top:20px; padding-top:13px; border-top:1px solid var(--line); color:var(--muted); font-size:.72rem; }
+
+    .task-list { display:grid; gap:10px; }
+    .task-row { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:18px; padding:17px; border:1px solid var(--line); border-radius:13px; background:var(--surface); }
+    .task-row h2 { margin:0 0 4px; font-size:.94rem; }
+    .task-row p { margin:0; color:var(--muted); font-size:.78rem; }
+    .task-date { text-align:right; color:var(--muted); font-size:.76rem; white-space:nowrap; }
+    .task-date b { display:block; color:var(--danger); }
+
+    .announcement-layout { display:grid; grid-template-columns:minmax(0,1fr) 300px; gap:22px; }
+    .search-box { display:flex; align-items:center; gap:10px; margin-bottom:17px; }
+    .search-field { position:relative; flex:1; }
+    .search-field svg { position:absolute; left:14px; top:50%; width:18px; height:18px; transform:translateY(-50%); color:var(--muted); }
+    .search-field input { width:100%; height:46px; padding:0 14px 0 42px; border:1px solid var(--line); border-radius:11px; background:var(--surface); color:var(--ink); }
+    .primary-btn { height:46px; padding:0 18px; border:0; border-radius:11px; background:var(--brand); color:#fff; font-weight:700; }
+    .primary-btn:hover { background:var(--brand-2); }
+    .search-result { min-height:30px; margin-bottom:12px; color:var(--muted); font-size:.84rem; }
+    .search-result strong { color:var(--ink); }
+    .announcement-list { display:grid; gap:12px; }
+    .announcement { padding:18px; border:1px solid var(--line); border-radius:13px; background:var(--surface); }
+    .announcement-top { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+    .announcement h2 { margin:10px 0 6px; font-size:1rem; }
+    .announcement p { margin:0; color:var(--muted); font-size:.83rem; }
+    .announcement time { color:var(--muted); font-size:.7rem; }
+
+    .lab-card { position:sticky; top:94px; padding:20px; border:1px solid #ead383; border-radius:15px; background:#fff8d9; color:#312b19; }
+    @media (prefers-color-scheme: dark) { .lab-card { background:#2c2919; color:#f5efdc; border-color:#635a2b; } }
+    .lab-badge { display:inline-flex; align-items:center; gap:7px; margin-bottom:12px; color:#745d00; font-family:var(--mono); font-size:.68rem; font-weight:700; letter-spacing:.05em; text-transform:uppercase; }
+    @media (prefers-color-scheme: dark) { .lab-badge { color:#f0cf53; } }
+    .lab-card h2 { margin:0; font-size:1.05rem; }
+    .lab-card > p { margin:8px 0 15px; color:color-mix(in srgb, currentColor 72%, transparent); font-size:.82rem; }
+    details { padding:11px 0; border-top:1px solid rgba(90,74,20,.19); }
+    summary { display:flex; justify-content:space-between; gap:10px; cursor:pointer; list-style:none; font-weight:700; font-size:.82rem; }
+    summary::-webkit-details-marker { display:none; }
+    summary::after { content:"+"; font-family:var(--mono); }
+    details[open] summary::after { content:"−"; }
+    details p { margin:8px 0 0; font-size:.78rem; color:color-mix(in srgb, currentColor 75%, transparent); overflow-wrap:anywhere; }
+    details code { font-family:var(--mono); font-size:.72rem; }
+    .lab-rules { margin:14px 0 0; padding-top:13px; border-top:1px solid rgba(90,74,20,.19); font-size:.72rem; color:color-mix(in srgb, currentColor 68%, transparent); }
+
+    .profile-card { display:grid; grid-template-columns:auto 1fr; gap:18px; align-items:center; max-width:650px; }
+    .avatar { width:72px; height:72px; font-size:1.25rem; }
+    .profile-card h2 { margin:0; }
+    .profile-card p { margin:5px 0 0; color:var(--muted); }
+    .profile-layout { display:grid; grid-template-columns:minmax(0,1fr) 300px; gap:22px; align-items:start; }
+    .profile-main { min-width:0; }
+    .profile-data { max-width:650px; margin-top:16px; }
+    .data-row { display:grid; grid-template-columns:150px 1fr; gap:20px; padding:14px 0; border-bottom:1px solid var(--line); }
+    .data-row span:first-child { color:var(--muted); }
+    .session-chip { display:flex; align-items:center; gap:8px; color:var(--muted); font-size:.76rem; }
+    .session-chip .mini-avatar { width:31px; height:31px; font-size:.68rem; }
+    .hint-actions { margin-top:14px; padding-top:13px; border-top:1px solid rgba(90,74,20,.19); }
+    .hint-btn { width:100%; min-height:42px; padding:8px 12px; border:1px solid rgba(90,74,20,.3); border-radius:9px; background:transparent; color:inherit; font-weight:700; }
+    .hint-btn:hover { background:rgba(90,74,20,.08); }
+    .hint-btn:disabled { cursor:default; opacity:.68; }
+    .hint-list { display:grid; gap:8px; margin-top:10px; }
+    .hint-step { margin:0; padding:10px 11px; border-radius:9px; background:rgba(90,74,20,.08); font-size:.78rem; }
+    .hint-step strong { display:block; margin-bottom:3px; font-size:.72rem; }
+    .hint-step code { font-family:var(--mono); font-size:.72rem; }
+
+    .admin-panel { display:none; margin-top:18px; border:2px solid var(--danger); border-radius:15px; overflow:hidden; background:var(--surface); box-shadow:var(--shadow); }
+    body.xss-hacked #xssPanel, body.idor-hacked #idorPanel { display:block; }
+    .admin-head { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:13px 16px; background:var(--danger-soft); color:var(--danger); }
+    .admin-head strong { font-family:var(--mono); font-size:.78rem; }
+    .admin-close { padding:5px 8px; border:1px solid color-mix(in srgb, var(--danger) 35%, transparent); border-radius:7px; background:transparent; color:var(--danger); }
+    .admin-body { padding:18px; }
+    .admin-body h2 { margin:0; font-size:1.1rem; }
+    .admin-body p { margin:7px 0 14px; color:var(--muted); font-size:.82rem; }
+    .flag { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:13px; border-radius:10px; background:#111a15; color:#d8f17b; font-family:var(--mono); font-size:.78rem; overflow-wrap:anywhere; }
+    .flag button { flex:0 0 auto; padding:7px 9px; border:0; border-radius:7px; background:#d8f17b; color:#142015; font-weight:700; }
+    .explain { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:12px; }
+    .explain div { padding:12px; border-radius:10px; background:var(--surface-2); }
+    .explain b { display:block; margin-bottom:4px; font-size:.76rem; }
+    .explain span { color:var(--muted); font-size:.72rem; }
+
+    .toast { position:fixed; left:50%; bottom:max(18px,env(safe-area-inset-bottom)); z-index:30; max-width:calc(100% - 28px); padding:11px 15px; transform:translate(-50%,16px); border-radius:9px; background:#142019; color:#fff; opacity:0; pointer-events:none; transition:.2s ease; }
+    .toast.show { opacity:1; transform:translate(-50%,0); }
+
+    @media (max-width: 940px) {
+      .app-shell { grid-template-columns:78px minmax(0,1fr); }
+      .sidebar { padding-inline:12px; }
+      .school-mark { justify-content:center; padding-inline:0; }
+      .school-mark div:last-child, .nav-label, .nav-btn span, .student-mini div:last-child { display:none; }
+      .nav-btn { justify-content:center; padding:0; }
+      .sidebar-bottom { left:12px; right:12px; }
+      .student-mini { justify-content:center; padding-inline:0; }
+      .dashboard-grid, .announcement-layout, .profile-layout { grid-template-columns:1fr; }
+      .lab-card { position:static; }
+    }
+    @media (max-width: 700px) {
+      .app-shell { display:block; }
+      .sidebar { position:fixed; left:0; right:0; bottom:0; top:auto; z-index:20; width:auto; height:70px; padding:8px 10px max(8px,env(safe-area-inset-bottom)); border-right:0; border-top:1px solid rgba(255,255,255,.1); }
+      .school-mark, .nav-label, .sidebar-bottom { display:none; }
+      .nav-list { grid-template-columns:repeat(5,1fr); gap:2px; }
+      .nav-btn { min-height:52px; flex-direction:column; justify-content:center; gap:3px; border-radius:8px; font-size:.6rem; }
+      .nav-btn span { display:block; }
+      .nav-btn svg { width:17px; height:17px; }
+      .topbar { height:62px; padding:0 18px; }
+      .mobile-menu { display:grid; }
+      .content { padding:24px 16px 110px; }
+      .page-head { align-items:flex-start; flex-direction:column; }
+      .date-chip { display:none; }
+      .hero-card { grid-template-columns:1fr; padding:23px; }
+      .hero-stats { max-width:330px; }
+      .cards-grid { grid-template-columns:1fr; }
+      .announcement-layout { gap:16px; }
+      .search-box { align-items:stretch; flex-direction:column; }
+      .primary-btn { width:100%; }
+      .explain { grid-template-columns:1fr; }
+    }
+    @media (max-width: 430px) {
+      .breadcrumb span { display:none; }
+      .course-row { grid-template-columns:42px minmax(0,1fr); }
+      .progress-ring { grid-column:2; }
+      .task-row { grid-template-columns:1fr; }
+      .task-date { text-align:left; }
+      .data-row { grid-template-columns:1fr; gap:3px; }
+      .flag { align-items:stretch; flex-direction:column; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior:auto; }
+      *, *::before, *::after { transition-duration:.01ms !important; animation-duration:.01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="Navigasi utama">
+      <div class="school-mark"><div class="school-logo">N</div><div><strong>Nexie Academy</strong><span>Student Portal</span></div></div>
+      <p class="nav-label">Menu utama</p>
+      <nav class="nav-list">
+        <button class="nav-btn active" data-view="dashboard" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg><span>Beranda</span></button>
+        <button class="nav-btn" data-view="courses" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m4 19.5 8-4 8 4V5.5l-8-4-8 4z"/><path d="M12 15.5v-14"/></svg><span>Kelas</span></button>
+        <button class="nav-btn" data-view="tasks" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg><span>Tugas</span></button>
+        <button class="nav-btn" data-view="announcements" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11v2a2 2 0 0 0 2 2h2l4 5h2l-2-5 8-3V6l-8-3v12"/></svg><span>Pengumuman</span></button>
+        <button class="nav-btn" data-view="profile" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span>Profil</span></button>
+      </nav>
+      <div class="sidebar-bottom"><div class="student-mini"><div class="mini-avatar">AS</div><div><strong>Andi Saputra</strong><span>Kelas XII PPLG</span></div></div></div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div class="breadcrumb"><span>Portal Siswa / </span><strong id="crumb">Dashboard</strong></div>
+        <div class="top-actions">
+          <div class="session-chip" aria-label="Masuk sebagai Andi Saputra"><div class="mini-avatar">AS</div><span>Andi Saputra</span></div>
+          <button class="icon-btn" type="button" aria-label="Bantuan" id="helpBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 0 1 5 0c0 2-2.5 2-2.5 4M12 17h.01"/></svg></button>
+          <button class="icon-btn" type="button" aria-label="Notifikasi" id="notifBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4"/></svg></button>
+        </div>
+      </header>
+
+      <div class="content">
+        <section class="view active" id="view-dashboard">
+          <div class="page-head"><div><h1>Selamat datang, Andi</h1><p>Lanjutkan progres belajarmu hari ini.</p></div><span class="date-chip">Selasa, 6 Oktober 2026</span></div>
+          <section class="hero-card">
+            <div><h2>Kelas keamanan web dimulai 40 menit lagi.</h2><p>Topik hari ini: memahami kontrol akses, mengenali IDOR, dan menguji apakah data pengguna lain ikut terbuka.</p></div>
+            <div class="hero-stats"><div class="hero-stat"><strong>3</strong><span>Kelas aktif</span></div><div class="hero-stat"><strong>2</strong><span>Tugas pekan ini</span></div></div>
+          </section>
+          <div class="dashboard-grid">
+            <section class="panel"><div class="panel-head"><h2>Kelas saya</h2><button class="text-btn" data-go="courses" type="button">Lihat semua</button></div><div class="course-list">
+              <article class="course-row"><div class="course-icon">SEC</div><div><h3>Keamanan Sistem Informasi</h3><p>Bab 3 · Web Security Dasar</p></div><div class="progress-ring" style="--p:72%" data-value="72%"></div></article>
+              <article class="course-row"><div class="course-icon">WEB</div><div><h3>Pemrograman Web</h3><p>Bab 6 · JavaScript DOM</p></div><div class="progress-ring" style="--p:64%" data-value="64%"></div></article>
+              <article class="course-row"><div class="course-icon">DB</div><div><h3>Basis Data</h3><p>Bab 4 · Query dan Relasi</p></div><div class="progress-ring" style="--p:48%" data-value="48%"></div></article>
+            </div></section>
+            <section class="panel"><div class="panel-head"><h2>Agenda terdekat</h2></div><div class="agenda">
+              <article class="agenda-item"><div class="agenda-date"><strong>06</strong><span>Okt</span></div><div><h3>Praktik Web Security</h3><p>19.00 · Lab komputer</p></div></article>
+              <article class="agenda-item"><div class="agenda-date"><strong>08</strong><span>Okt</span></div><div><h3>Pengumpulan Tugas DOM</h3><p>23.59 · Portal tugas</p></div></article>
+              <article class="agenda-item"><div class="agenda-date"><strong>10</strong><span>Okt</span></div><div><h3>Kuis Basis Data</h3><p>09.00 · Ruang 2</p></div></article>
+            </div></section>
+          </div>
+        </section>
+
+        <section class="view" id="view-courses">
+          <div class="page-head"><div><h1>Kelas saya</h1><p>Materi dan progres belajar semester ini.</p></div></div>
+          <div class="cards-grid">
+            <article class="item-card"><span class="tag">Aktif</span><h2>Keamanan Sistem Informasi</h2><p>Dasar keamanan jaringan, aplikasi web, dan pengelolaan insiden.</p><div class="item-meta"><span>12 materi</span><strong>72%</strong></div></article>
+            <article class="item-card"><span class="tag">Aktif</span><h2>Pemrograman Web</h2><p>Membangun antarmuka web interaktif dengan HTML, CSS, dan JavaScript.</p><div class="item-meta"><span>10 materi</span><strong>64%</strong></div></article>
+            <article class="item-card"><span class="tag">Aktif</span><h2>Basis Data</h2><p>Perancangan relasi, query, dan praktik mengelola data aplikasi.</p><div class="item-meta"><span>8 materi</span><strong>48%</strong></div></article>
+          </div>
+        </section>
+
+        <section class="view" id="view-tasks">
+          <div class="page-head"><div><h1>Tugas</h1><p>Pantau tugas yang perlu diselesaikan.</p></div></div>
+          <div class="task-list">
+            <article class="task-row"><div><h2>Analisis Validasi Input</h2><p>Keamanan Sistem Informasi · Belum dikumpulkan</p></div><div class="task-date"><b>2 hari lagi</b>8 Oktober, 23.59</div></article>
+            <article class="task-row"><div><h2>Manipulasi DOM Dasar</h2><p>Pemrograman Web · Belum dikumpulkan</p></div><div class="task-date"><b>4 hari lagi</b>10 Oktober, 17.00</div></article>
+            <article class="task-row"><div><h2>Normalisasi Tabel</h2><p>Basis Data · Sudah dikumpulkan</p></div><div class="task-date">Selesai<br>4 Oktober, 20.12</div></article>
+          </div>
+        </section>
+
+        <section class="view" id="view-announcements">
+          <div class="page-head"><div><h1>Pengumuman</h1><p>Informasi terbaru dari sekolah dan pengajar.</p></div></div>
+          <div class="announcement-layout">
+            <div>
+              <form class="search-box" id="searchForm">
+                <label class="search-field"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><input id="announcementSearch" type="text" autocomplete="off" spellcheck="false" maxlength="180" placeholder="Cari judul atau isi pengumuman" aria-label="Cari pengumuman" /></label>
+                <button class="primary-btn" type="submit">Cari</button>
+              </form>
+              <div class="search-result" id="searchResult">Menampilkan semua pengumuman</div>
+              <div class="announcement-list" id="announcementList">
+                <article class="announcement"><div class="announcement-top"><span class="status-pill">Akademik</span><time>5 Oktober 2026</time></div><h2>Jadwal praktik laboratorium pekan ini</h2><p>Praktik kelas XII PPLG dilaksanakan sesuai jadwal. Bawa laptop dan pastikan akun portal aktif.</p></article>
+                <article class="announcement"><div class="announcement-top"><span class="status-pill">Kegiatan</span><time>3 Oktober 2026</time></div><h2>Pendaftaran klub teknologi</h2><p>Pendaftaran klub pemrograman dan robotika dibuka hingga Jumat melalui wali kelas.</p></article>
+                <article class="announcement"><div class="announcement-top"><span class="status-pill">Umum</span><time>1 Oktober 2026</time></div><h2>Pemeliharaan jaringan sekolah</h2><p>Akses Wi-Fi laboratorium akan dibatasi sementara setelah kegiatan belajar selesai.</p></article>
+              </div>
+
+              <section class="admin-panel" id="xssPanel" aria-live="polite">
+                <div class="admin-head"><strong>ADMIN DEBUG PANEL · AKSES TIDAK SAH</strong><button class="admin-close" id="closeXss" type="button">Tutup</button></div>
+                <div class="admin-body"><h2>Berhasil mengeksekusi JavaScript di halaman</h2><p>Input pencarian dirender sebagai HTML tanpa sanitasi. Event <code>onerror</code> pada elemen gambar berhasil menjalankan kode dari inputmu.</p><div class="flag"><span id="xssFlagText"></span><button id="copyXssFlag" type="button">Salin flag</button></div>
+                  <div class="explain"><div><b>Jenis celah</b><span>DOM-based XSS</span></div><div><b>Dampak</b><span>Script berjalan memakai konteks pengguna</span></div><div><b>Perbaikan</b><span>Render sebagai teks dan sanitasi input</span></div></div>
+                </div>
+              </section>
+            </div>
+
+            <aside class="lab-card" id="xssLabCard">
+              <span class="lab-badge">Security Lab · Misi 02</span>
+              <h2>Bisakah pencarian dipercaya?</h2>
+              <p>Setelah IDOR, lanjutkan dengan mencari input yang bisa dieksekusi sebagai kode sampai flag kedua muncul.</p>
+              <details><summary>Hint 1</summary><p>Fokus ke fitur yang menampilkan kembali input kamu di halaman.</p></details>
+              <details><summary>Hint 2</summary><p>Coba masukkan tag HTML sederhana seperti <code>&lt;b&gt;test&lt;/b&gt;</code>. Apakah browser merendernya sebagai HTML?</p></details>
+              <details><summary>Hint 3</summary><p>Jalankan payload: <code>&lt;img src=x onerror=alert(1)&gt;</code></p></details>
+              <div class="lab-rules">Gunakan hanya di simulasi ini. Jangan menguji situs lain tanpa izin.</div>
+            </aside>
+          </div>
+        </section>
+
+        <section class="view" id="view-profile">
+          <div class="page-head"><div><h1>Profil siswa</h1><p>Informasi akun yang sedang digunakan.</p></div></div>
+          <div class="profile-layout">
+            <div class="profile-main">
+              <section class="panel profile-card"><div class="avatar" id="profileAvatar">AS</div><div><h2 id="profileName">Andi Saputra</h2><p id="profileRole">Siswa · XII PPLG</p></div></section>
+              <section class="panel profile-data"><div class="data-row"><span>Nomor induk</span><strong id="profileNumber">2026-DEMO-012</strong></div><div class="data-row"><span>Email</span><strong id="profileEmail">andi.siswa@example.test</strong></div><div class="data-row"><span>Status akun</span><strong id="profileStatus">Aktif</strong></div></section>
+
+              <section class="admin-panel" id="idorPanel" aria-live="polite">
+                <div class="admin-head"><strong>DATA SISWA LAIN TERBUKA · AKSES TIDAK SAH</strong><button class="admin-close" id="closeIdor" type="button">Tutup</button></div>
+                <div class="admin-body"><h2>IDOR berhasil ditemukan</h2><p>Endpoint profil mengirim objek yang kamu minta, tetapi tidak memeriksa apakah profil itu milik akun Andi. Mengganti ID saja sudah membuka data siswa lain.</p><div class="flag"><span id="idorFlagText"></span><button id="copyIdorFlag" type="button">Salin flag</button></div>
+                  <div class="explain"><div><b>Jenis celah</b><span>Insecure Direct Object Reference</span></div><div><b>Dampak</b><span>Data pengguna lain dapat dibaca</span></div><div><b>Perbaikan</b><span>Periksa kepemilikan objek di server</span></div></div>
+                </div>
+              </section>
+            </div>
+
+            <aside class="lab-card" id="idorLabCard">
+              <span class="lab-badge">Security Lab · Misi 01</span>
+              <h2>Bisa buka profil siswa lain?</h2>
+              <p>Kamu sedang login sebagai Andi. Temukan cara membuka profil siswa lain tanpa tombol atau form bantuan sampai flag muncul.</p>
+              <div class="hint-actions">
+                <button class="hint-btn" id="idorHintBtn" type="button">Minta hint 1</button>
+                <div class="hint-list" id="idorHints" aria-live="polite">
+                  <p class="hint-step" hidden><strong>Hint 1</strong>Perhatikan URL saat halaman profil Andi terbuka.</p>
+                  <p class="hint-step" hidden><strong>Hint 2</strong>ID pengguna sering berurutan. Coba ubah satu angka terakhir.</p>
+                  <p class="hint-step" hidden><strong>Hint 3</strong>Coba ubah <code>student_id=1001</code> menjadi <code>student_id=1002</code>.</p>
+                </div>
+              </div>
+              <div class="lab-rules">Gunakan hanya di simulasi ini. Jangan menguji situs lain tanpa izin.</div>
+            </aside>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    (function () {
+      var labels = { dashboard:"Beranda", courses:"Kelas", tasks:"Tugas", announcements:"Pengumuman", profile:"Profil" };
+      var toast = document.getElementById("toast");
+      var toastTimer;
+
+      function showToast(message) {
+        toast.textContent = message;
+        toast.classList.add("show");
+        window.clearTimeout(toastTimer);
+        toastTimer = window.setTimeout(function () { toast.classList.remove("show"); }, 1800);
+      }
+
+      var missionFlags = {
+        idor: "CTF{idor_pertamaku}",
+        xss: "CTF{xss_meledak}"
+      };
+
+      function revealFlag(name, targetId, onReveal) {
+        document.getElementById(targetId).textContent = missionFlags[name];
+        onReveal();
+      }
+
+      function profileIdFromUrl() {
+        return new URLSearchParams(window.location.search).get("student_id");
+      }
+
+      function renderProfile(profile) {
+        document.getElementById("profileAvatar").textContent = profile.initials;
+        document.getElementById("profileName").textContent = profile.name;
+        document.getElementById("profileRole").textContent = profile.role;
+        document.getElementById("profileNumber").textContent = profile.number;
+        document.getElementById("profileEmail").textContent = profile.email;
+        document.getElementById("profileStatus").textContent = profile.status;
+      }
+
+      function loadProfileFromUrl() {
+        var id = profileIdFromUrl() || "1001";
+        document.body.classList.remove("idor-hacked");
+        document.getElementById("idorFlagText").textContent = "";
+        if (!/^\d{4}$/.test(id)) {
+          showToast("Profil tidak ditemukan.");
+          return;
+        }
+        fetch("assets/api/profile/" + id + ".json").then(function (response) {
+          if (!response.ok) throw new Error("not-found");
+          return response.json();
+        }).then(function (profile) {
+          renderProfile(profile);
+          if (id !== "1001") {
+            revealFlag("idor", "idorFlagText", function () {
+              document.body.classList.add("idor-hacked");
+              showToast("Data siswa lain terbuka. Flag ditemukan.");
+              window.setTimeout(function () { document.getElementById("idorPanel").scrollIntoView({ behavior:"smooth", block:"center" }); }, 180);
+            });
+          }
+        }).catch(function () {
+          showToast("Profil dengan ID " + id + " tidak ditemukan.");
+        });
+      }
+
+      function routeForView(name) {
+        var path = window.location.pathname;
+        if (name === "profile") {
+          var currentId = profileIdFromUrl();
+          if (!currentId) window.history.pushState({ view:name }, "", path + "?student_id=1001");
+          loadProfileFromUrl();
+        } else if (window.location.search) {
+          window.history.pushState({ view:name }, "", path);
+        }
+      }
+
+      function showView(name, preserveRoute) {
+        document.querySelectorAll(".view").forEach(function (view) { view.classList.toggle("active", view.id === "view-" + name); });
+        document.querySelectorAll(".nav-btn").forEach(function (button) { button.classList.toggle("active", button.getAttribute("data-view") === name); });
+        document.getElementById("crumb").textContent = labels[name];
+        if (!preserveRoute) routeForView(name);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
+      document.querySelectorAll("[data-view]").forEach(function (button) {
+        button.addEventListener("click", function () { showView(button.getAttribute("data-view")); });
+      });
+      document.querySelectorAll("[data-go]").forEach(function (button) {
+        button.addEventListener("click", function () { showView(button.getAttribute("data-go")); });
+      });
+
+      document.getElementById("notifBtn").addEventListener("click", function () { showToast("Tidak ada notifikasi baru."); });
+      document.getElementById("helpBtn").addEventListener("click", function () { showView("profile"); document.getElementById("idorLabCard").scrollIntoView({ behavior:"smooth", block:"center" }); });
+
+      function revealXssFlag() {
+        if (document.body.classList.contains("xss-hacked")) return;
+        revealFlag("xss", "xssFlagText", function () {
+          document.body.classList.add("xss-hacked");
+          showToast("Payload dieksekusi. Flag ditemukan.");
+          window.setTimeout(function () { document.getElementById("xssPanel").scrollIntoView({ behavior:"smooth", block:"center" }); }, 180);
+        });
+      }
+
+      window.__nexieXssExecuted = revealXssFlag;
+
+      function instrumentXssPayload(markup) {
+        var template = document.createElement("template");
+        template.innerHTML = markup;
+        template.content.querySelectorAll("*").forEach(function (element) {
+          Array.prototype.slice.call(element.attributes).forEach(function (attribute) {
+            if (/^on/i.test(attribute.name)) {
+              element.setAttribute(attribute.name, "window.__nexieXssExecuted();" + attribute.value);
+            }
+          });
+          ["href", "src", "action", "formaction"].forEach(function (attributeName) {
+            var value = element.getAttribute(attributeName);
+            if (value && /^\s*javascript:/i.test(value)) {
+              element.setAttribute(attributeName, value.replace(/^\s*javascript:/i, "javascript:window.__nexieXssExecuted();"));
+            }
+          });
+        });
+        return template.innerHTML;
+      }
+
+      document.getElementById("searchForm").addEventListener("submit", function (event) {
+        event.preventDefault();
+        var query = document.getElementById("announcementSearch").value.trim();
+        var result = document.getElementById("searchResult");
+        var announcements = Array.prototype.slice.call(document.querySelectorAll(".announcement"));
+        if (!query) {
+          result.textContent = "Menampilkan semua pengumuman";
+          announcements.forEach(function (item) { item.hidden = false; });
+          showToast("Menampilkan semua pengumuman.");
+          return;
+        }
+        result.innerHTML = 'Hasil pencarian untuk: <strong>' + instrumentXssPayload(query) + '</strong>';
+        var plainQuery = query.replace(/<[^>]*>/g, "").toLowerCase();
+        var visible = 0;
+        announcements.forEach(function (item) {
+          var match = !plainQuery || item.textContent.toLowerCase().indexOf(plainQuery) !== -1;
+          item.hidden = !match;
+          if (match) visible += 1;
+        });
+        if (!visible && plainQuery) result.insertAdjacentHTML("beforeend", " · tidak ada pengumuman yang cocok");
+        showToast(visible ? visible + " pengumuman ditemukan." : "Tidak ada hasil.");
+      });
+
+      var revealedHints = 0;
+      document.getElementById("idorHintBtn").addEventListener("click", function () {
+        var hints = document.querySelectorAll("#idorHints .hint-step");
+        if (revealedHints < hints.length) {
+          hints[revealedHints].hidden = false;
+          revealedHints += 1;
+        }
+        if (revealedHints < hints.length) {
+          this.textContent = "Minta hint " + (revealedHints + 1);
+        } else {
+          this.textContent = "Semua hint terbuka";
+          this.disabled = true;
+        }
+      });
+
+      document.getElementById("closeIdor").addEventListener("click", function () {
+        document.body.classList.remove("idor-hacked");
+        showToast("Panel ditutup. Celah masih aktif.");
+      });
+
+      document.getElementById("closeXss").addEventListener("click", function () {
+        document.body.classList.remove("xss-hacked");
+        showToast("Panel ditutup. Celah masih aktif.");
+      });
+
+      function copyFlag(id) {
+        var flag = document.getElementById(id).textContent;
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(flag).then(function () { showToast("Flag disalin."); }, function () { showToast("Pilih teks flag lalu salin manual."); });
+        } else {
+          showToast("Pilih teks flag lalu salin manual.");
+        }
+      }
+
+      document.getElementById("copyIdorFlag").addEventListener("click", function () { copyFlag("idorFlagText"); });
+      document.getElementById("copyXssFlag").addEventListener("click", function () { copyFlag("xssFlagText"); });
+
+      window.addEventListener("popstate", function () {
+        if (profileIdFromUrl()) {
+          showView("profile", true);
+          loadProfileFromUrl();
+        } else {
+          showView("dashboard", true);
+        }
+      });
+
+      if (profileIdFromUrl()) {
+        showView("profile", true);
+        loadProfileFromUrl();
+      }
+    }());
+  </script>
+</body>
+</html>
