@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Toko Mini NextSkill - Misi Test</title>
+<style>
+body{font-family:system-ui,sans-serif;margin:0;background:#f6f4ff;color:#222}
+header{background:#5b3df0;color:#fff;padding:16px}
+.badge{display:inline-block;background:#ffb020;color:#222;font-weight:700;font-size:12px;padding:4px 10px;border-radius:999px}
+main{padding:16px}
+.card{background:#fff;border-radius:12px;padding:14px;margin:12px 0;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.price{font-weight:700;color:#5b3df0}
+#admin{display:none;background:#111;color:#7dff9a;border-radius:12px;padding:14px;margin:12px 0}
+footer{padding:16px;font-size:12px;color:#777}
+code{background:#eee;padding:2px 6px;border-radius:6px}
+#admin code{background:#222;color:#7dff9a}
+</style>
+</head>
+<body>
+<header>
+<span class="badge">MISI TEST</span>
+<h1>Toko Mini NextSkill</h1>
+<p>Web ini punya mode tersembunyi. Cari cara masuknya, temukan flagnya.</p>
+</header>
+<main>
+<div class="card"><h2>Paket Coding Anak</h2><p>Kelas coding dan robotika, 4x pertemuan.</p><p class="price">Rp400.000 / bulan</p></div>
+<div class="card"><h2>Paket Robotik</h2><p>WeDo + Scratch, 4x pertemuan.</p><p class="price">Rp650.000 / bulan</p></div>
+<div class="card"><h2>Paket Python Remaja</h2><p>Python + Arduino, 4x pertemuan.</p><p class="price">Rp750.000 / bulan</p></div>
+<div id="admin">
+<h2>Panel Internal (mode debug aktif)</h2>
+<p>Panel ini harusnya tidak bisa diakses publik. Developer lupa mematikan mode debug sebelum rilis.</p>
+<p>Flag kamu: <code id="flag"></code></p>
+<p>Pelajaran: matikan mode debug di production, dan jangan taruh panel internal di URL yang bisa ditebak.</p>
+</div>
+</main>
+<footer>Build: debug v1.2 (internal) - Toko Mini NextSkill</footer>
+<script>
+(function(){
+  var p = new URLSearchParams(location.search);
+  if (p.get('debug') === '1') {
+    document.getElementById('admin').style.display = 'block';
+    var parts = ['test', 'mode', 'debug'];
+    document.getElementById('flag').textContent = 'CTF{' + parts.join('_') + '}';
+  }
+})();
+</script>
+</body>
+</html>
